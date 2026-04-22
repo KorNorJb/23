@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4 года вместе</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #fff7fa 0%, #fff0f5 45%, #ffffff 100%);
+      color: #2f2a2d;
+      overflow-x: hidden;
+    }
+
+    .bg-blur {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .blur {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.45;
+      animation: float 10s ease-in-out infinite;
+    }
+
+    .blur.one {
+      width: 280px;
+      height: 280px;
+      background: #ffc6da;
+      top: 50px;
+      left: 5%;
+    }
+
+    .blur.two {
+      width: 340px;
+      height: 340px;
+      background: #ffd9eb;
+      top: 120px;
+      right: 8%;
+      animation-delay: 2s;
+    }
+
+    .blur.three {
+      width: 320px;
+      height: 320px;
+      background: #ffe8f3;
+      bottom: 80px;
+      left: 35%;
+      animation-delay: 4s;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -40px;
+      color: rgba(255, 120, 160, 0.35);
+      font-size: 18px;
+      animation: rise linear infinite;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 0 40px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 10px 18px;
+      border: 1px solid #f3c7d8;
+      background: rgba(255,255,255,0.7);
+      border-radius: 999px;
+      font-size: 14px;
+      box-shadow: 0 10px 30px rgba(228, 164, 187, 0.15);
+      backdrop-filter: blur(8px);
+      animation: fadeUp 1s ease both;
+    }
+
+    h1 {
+      margin-top: 24px;
+      font-size: clamp(38px, 7vw, 82px);
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+      animation: fadeUp 1.1s ease both;
+    }
+
+    .gradient-text {
+      display: block;
+      background: linear-gradient(90deg, #ff6f9f, #ff8cbc, #d973ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+              background-clip: text;
+              color: transparent;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 24px auto 0;
+      font-size: 18px;
+      line-height: 1.8;
+      color: #6f6570;
+      animation: fadeUp 1.25s ease both;
+    }
+
+    .hero-buttons {
+      margin-top: 38px;
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 1.4s ease both;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 24px;
+      border-radius: 18px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .btn-dark {
+      background: #2f2a2d;
+      color: white;
+      box-shadow: 0 12px 30px rgba(47, 42, 45, 0.18);
+    }
+
+    .btn-light {
+      background: rgba(255,255,255,0.88);
+      color: #40373c;
+      border: 1px solid #f0d7e1;
+      box-shadow: 0 10px 26px rgba(236, 194, 210, 0.14);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    section {
+      padding: 56px 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(244, 212, 224, 0.9);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(235, 194, 211, 0.12);
+      backdrop-filter: blur(10px);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 50px rgba(235, 194, 211, 0.18);
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: #eb7fa5;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    .card p, .section-text, .message p {
+      color: #665d64;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(30px, 5vw, 48px);
+      margin-bottom: 12px;
+    }
+
+    .section-intro {
+      max-width: 760px;
+      color: #6d646b;
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+
+    .year-tag {
+      display: inline-block;
+      padding: 8px 14px;
+      background: #ffe3ee;
+      color: #c75a82;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 18px;
+    }
+
+    .photo-box {
+      position: relative;
+      border-radius: 30px;
+      padding: 10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,243,248,0.95));
+      border: 1px solid rgba(241, 191, 209, 0.9);
+      box-shadow: 0 18px 40px rgba(238, 198, 214, 0.18);
+      overflow: hidden;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .photo-box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), transparent 35%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .photo-box:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 24px 54px rgba(238, 198, 214, 0.26);
+    }
+
+    .photo-box img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 22px;
+    }
+
+    .photo-box.photo-1 {
+      grid-column: span 3;
+      aspect-ratio: 3 / 4.2;
+      margin-top: 28px;
+      transform: rotate(-3deg);
+    }
+
+    .photo-box.photo-2 {
+      grid-column: span 3;
+      aspect-ratio: 3 / 4.8;
+      transform: rotate(2deg);
+    }
+
+    .photo-box.photo-3 {
+      grid-column: span 3;
+      aspect-ratio: 3 / 4.15;
+      margin-top: 18px;
+      transform: rotate(-1.5deg);
+    }
+
+    .photo-box.photo-4 {
+      grid-column: span 3;
+      aspect-ratio: 3 / 4.6;
+      transform: rotate(3deg);
+    }
+
+    .photo-box.photo-1:hover,
+    .photo-box.photo-2:hover,
+    .photo-box.photo-3:hover,
+    .photo-box.photo-4:hover {
+      transform: translateY(-8px) scale(1.02) rotate(0deg);
+    }
+
+    .photo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fff3f7, #ffe0eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9b7d89;
+      text-align: center;
+      padding: 14px;
+      font-size: 15px;
+    }
+
+    .message {
+      background: linear-gradient(135deg, #2e272b, #40343b 60%, #2c2529);
+      color: white;
+      border-radius: 36px;
+      padding: 46px 34px;
+      box-shadow: 0 30px 70px rgba(221, 166, 191, 0.28);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .message::before {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(255, 145, 190, 0.12);
+      top: -60px;
+      right: -20px;
+      filter: blur(12px);
+    }
+
+    .message p {
+      color: rgba(255,255,255,0.86);
+      font-size: 18px;
+    }
+
+    .quote {
+      margin-top: 26px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      border-radius: 24px;
+      padding: 22px;
+      font-style: italic;
+      color: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+    }
+
+    .flowers-section {
+      padding-top: 30px;
+      padding-bottom: 90px;
+      text-align: center;
+    }
+
+    .flowers-wrap {
+      position: relative;
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,240,247,0.9));
+      border: 1px solid #f3d6e2;
+      border-radius: 40px;
+      padding: 50px 20px 180px;
+      box-shadow: 0 30px 80px rgba(234, 190, 208, 0.18);
+      overflow: hidden;
+    }
+
+    .flowers-wrap::before {
+      content: "";
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255,182,215,0.35), transparent 70%);
+      filter: blur(20px);
+    }
+
+    .flowers-wrap p {
+      max-width: 720px;
+      margin: 14px auto 0;
+      line-height: 1.8;
+      color: #6f6470;
+    }
+
+    .bouquet {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      width: min(92%, 820px);
+      height: 220px;
+    }
+
+    .flower {
+      position: absolute;
+      bottom: 0;
+      width: 90px;
+      height: 160px;
+      animation: sway 4s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+
+    .stem {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 5px;
+      height: 110px;
+      background: linear-gradient(180deg, #7ecb8c, #4f9e63);
+      transform: translateX(-50%);
+      border-radius: 10px;
+    }
+
+    .leaf {
+      position: absolute;
+      width: 28px;
+      height: 16px;
+      background: #7fc68a;
+      border-radius: 28px 0 28px 0;
+    }
+
+    .leaf.left {
+      left: 26px;
+      bottom: 44px;
+      transform: rotate(-35deg);
+    }
+
+    .leaf.right {
+      right: 26px;
+      bottom: 64px;
+      transform: rotate(145deg);
+    }
+
+    .bloom {
+      position: absolute;
+      left: 50%;
+      top: 6px;
+      width: 70px;
+      height: 70px;
+      transform: translateX(-50%);
+      animation: bloom 1.8s ease forwards;
+    }
+
+    .petal {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      opacity: 0.95;
+    }
+
+    .center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, #ffd36c, #ffb347);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      box-shadow: 0 0 22px rgba(255, 211, 108, 0.7);
+    }
+
+    .p1 { top: 0; left: 20px; }
+    .p2 { top: 20px; left: 0; }
+    .p3 { top: 20px; right: 0; }
+    .p4 { bottom: 0; left: 20px; }
+    .p5 { top: 20px; left: 20px; }
+
+    .flower.f1 { left: 2%; animation-delay: 0s; }
+    .flower.f2 { left: 14%; animation-delay: 0.5s; }
+    .flower.f3 { left: 26%; animation-delay: 1s; }
+    .flower.f4 { left: 38%; animation-delay: 0.2s; }
+    .flower.f5 { left: 50%; animation-delay: 0.8s; }
+    .flower.f6 { left: 62%; animation-delay: 1.4s; }
+    .flower.f7 { left: 74%; animation-delay: 0.3s; }
+    .flower.f8 { left: 86%; animation-delay: 1.1s; }
+
+    .pink .petal { background: #ff9fc1; }
+    .rose .petal { background: #ff7faa; }
+    .lilac .petal { background: #d8a4ff; }
+    .peach .petal { background: #ffc3a0; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      text-align: center;
+      color: #8d7f89;
+      padding: 0 0 36px;
+      font-size: 14px;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+      50% { transform: translateY(-18px) translateX(8px) scale(1.05); }
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0;
+      }
+      15% { opacity: 1; }
+      100% {
+        transform: translateY(-115vh) translateX(18px) scale(1.25);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-2deg) translateY(0); }
+      50% { transform: rotate(3deg) translateY(-6px); }
+    }
+
+    @keyframes bloom {
+      0% { transform: scale(0.7); opacity: 0.6; }
+      50% { transform: rotate(2deg); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @media (max-width: 920px) {
+      .grid-3, .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .photo-box.photo-1,
+      .photo-box.photo-2,
+      .photo-box.photo-3,
+      .photo-box.photo-4 {
+        grid-column: auto;
+        aspect-ratio: 3 / 4.2;
+        margin-top: 0;
+        transform: rotate(0deg);
+      }
+
+      .bouquet {
+        height: 210px;
+      }
+    }
+
+      .bouquet {
+        height: 210px;
+      }
+
+    @media (max-width: 640px) {
+      .grid-3, .grid-2, .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 110px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+      }
+
+      .message {
+        padding: 36px 22px;
+      }
+
+      .photo-box.photo-1,
+      .photo-box.photo-2,
+      .photo-box.photo-3,
+      .photo-box.photo-4 {
+        aspect-ratio: 3 / 4.2;
+      }
+
+      .flower {
+        width: 72px;
+        height: 145px;
+      }
+
+      .bloom {
+        width: 58px;
+        height: 58px;
+      }
+
+      .petal {
+        width: 24px;
+        height: 24px;
+      }
+
+      .center {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+      .hero {
+        padding-top: 110px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+      }
+
+      .message {
+        padding: 36px 22px;
+      }
+
+      .flower {
+        width: 72px;
+        height: 145px;
+      }
+
+      .bloom {
+        width: 58px;
+        height: 58px;
+      }
+
+      .petal {
+        width: 24px;
+        height: 24px;
+      }
+
+      .center {
+        width: 16px;
+        height: 16px;
+      }
+  </style>
+</head>
+<body>
+  <div class="bg-blur">
+    <div class="blur one"></div>
+    <div class="blur two"></div>
+    <div class="blur three"></div>
+  </div>
+
+  <div class="hearts" id="hearts"></div>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="badge">4 года вместе</div>
+        <h1>
+          Спасибо тебе за эти
+          <span class="gradient-text">прекрасные 4 года</span>
+        </h1>
+        <div class="hero-buttons">
+          <a href="#message" class="btn btn-dark">Прочитать послание</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container reveal">
+      <div class="grid-3">
+        <div class="card">
+          <div class="eyebrow">Что я ценю</div>
+          <h3>Твою доброту</h3>
+          <p>То, как ты умеешь поддержать, понять и сделать любой день светлее.</p>
+        </div>
+        <div class="card">
+          <div class="eyebrow">Что я помню</div>
+          <h3>Наши моменты</h3>
+          <p>Даже самые обычные дни рядом с тобой стали для меня по-настоящему особенными. </p>
+        </div>
+        <div class="card">
+          <div class="eyebrow">Что я хочу сказать</div>
+          <h3>Спасибо за нас</h3>
+          <p>За тепло, заботу, искренность и за все чувства, которые мы создавали вместе все эти годы.  Я тебя очень люблю</p>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <section class="container reveal">
+      <div class="eyebrow">Ваши фото</div>
+      <h2 class="section-title">Место для любимых снимков</h2>
+      <p class="section-intro">
+        Сюда можно вставить ваши фотографии: прогулки, поездки, праздники или просто самые любимые кадры.
+      </p>
+      <div class="grid-4">
+        <div class="photo-box photo-1"><img src="image1.jpg" alt="photo1"></div>
+        <div class="photo-box photo-2"><img src="image2.jpg" alt="photo2"></div>
+        <div class="photo-box photo-3"><img src="image3.jpg" alt="photo3"></div>
+        <div class="photo-box photo-4"><img src="image4.jpg" alt="photo4"></div>
+      </div>
+    </section>
+
+    <section id="message" class="container reveal">
+      <div class="message">
+        <div class="eyebrow" style="color:#ffb7d2;">Главное, что я хочу сказать</div>
+        <h2 class="section-title" style="color:white;">Ты — очень важная часть моей жизни</h2>
+        <p>
+          За эти 4 года рядом с тобой было столько тёплых, искренних и счастливых моментов,
+          которые я правда очень ценю. Спасибо тебе за заботу, терпение, поддержку, улыбки и
+          за ту атмосферу, которую ты создаёшь просто своим присутствием.
+        </p>
+        <p style="margin-top:18px;">
+          Мне очень дорого всё, что связано с нами. И этот день — ещё один повод сказать,
+          как я рад, что все эти 4 года мы были вместе.
+        </p>
+        <div class="quote">
+          «Спасибо тебе за любовь, тепло и наши воспоминания. Я очень ценю тебя и всё, что у нас есть.»
+        </div>
+      </div>
+    </section>
+
+    <section class="container flowers-section reveal">
+      <div class="flowers-wrap">
+        <div class="eyebrow">Для тебя</div>
+        <h2 class="section-title">И в конце — цветы</h2>
+        <p>
+          Потому что ты заслуживаешь не только слова, но и что-то красивое в завершении этой маленькой истории.
+          Пусть здесь тебя встречает нежный букет — как символ тепла, любви и всего самого прекрасного, что связано с нами.
+        </p>
+
+        <div class="bouquet">
+          <div class="flower f1 pink">
+            <div class="stem"></div><div class="leaf left"></div><div class="leaf right"></div>
+            <div class="bloom"><div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div><div class="petal p5"></div><div class="center"></div></div>
+          </div>
+          <div class="flower f2 rose">
+            <div class="stem"></div><div class="leaf left"></div><div class="leaf right"></div>
+            <div class="bloom"><div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div><div class="petal p5"></div><div class="center"></div></div>
+          </div>
+          <div class="flower f3 lilac">
+            <div class="stem"></div><div class="leaf left"></div><div class="leaf right"></div>
+            <div class="bloom"><div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div><div class="petal p5"></div><div class="center"></div></div>
+          </div>
+          <div class="flower f4 peach">
+            <div class="stem"></div><div class="leaf left"></div><div class="leaf right"></div>
+            <div class="bloom"><div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div><div class="petal p5"></div><div class="center"></div></div>
+          </div>
+          <div class="flower f5 rose">
+            <div class="stem"></div><div class="leaf left"></div><div class="leaf right"></div>
+            <div class="bloom"><div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div><div class="petal p5"></div><div class="center"></div></div>
+          </div>
+          <div class="flower f6 pink">
+            <div class="stem"></div><div class="leaf left"></div><div class="leaf right"></div>
+            <div class="bloom"><div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div><div class="petal p5"></div><div class="center"></div></div>
+          </div>
+          <div class="flower f7 lilac">
+            <div class="stem"></div><div class="leaf left"></div><div class="leaf right"></div>
+            <div class="bloom"><div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div><div class="petal p5"></div><div class="center"></div></div>
+          </div>
+          <div class="flower f8 peach">
+            <div class="stem"></div><div class="leaf left"></div><div class="leaf right"></div>
+            <div class="bloom"><div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div><div class="petal p5"></div><div class="center"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Сделано с теплом для особенного человека.
+  </footer>
+
+  <script>
+    const hearts = document.getElementById('hearts');
+    for (let i = 0; i < 18; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = '❤';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (8 + Math.random() * 8) + 's';
+      heart.style.animationDelay = Math.random() * 8 + 's';
+      heart.style.fontSize = (14 + Math.random() * 16) + 'px';
+      hearts.appendChild(heart);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
